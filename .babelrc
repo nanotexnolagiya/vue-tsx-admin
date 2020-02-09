@@ -1,0 +1,17 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": ["last 2 versions", "ie >= 9"]
+        }
+      }
+    ],
+    "@babel/preset-typescript",
+    "@vue/babel-preset-jsx"
+  ],
+  "plugins": ["@babel/plugin-proposal-class-properties"],
+  "ignore": ["node_modules"]
+}
