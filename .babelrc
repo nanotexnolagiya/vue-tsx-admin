@@ -12,6 +12,9 @@
     "@babel/preset-typescript",
     "@vue/babel-preset-jsx"
   ],
-  "plugins": ["@babel/plugin-proposal-class-properties"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }]
+  ],
   "ignore": ["node_modules"]
 }

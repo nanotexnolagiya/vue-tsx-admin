@@ -1,30 +1,27 @@
-const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserWebpackPlugin = require('terser-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const path = require('path')
+const HTMLWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development'
 
 const assetsPath = (_path) => path.posix.join('assets', _path)
 
-const filename = ext => (isDev ? `[name].${ext}` : `[hash].[name].${ext}`)
+const filename = (ext) => (isDev ? `[name].${ext}` : `[hash].[name].${ext}`)
 
 const optimization = () => {
   const config = {
     splitChunks: {
-      chunks: 'all'
-    }
-  };
+      chunks: 'all',
+    },
+  }
 
   if (!isDev) {
-    config.minimizer = [
-      new OptimizeCssAssetsWebpackPlugin(),
-      new TerserWebpackPlugin()
-    ]
+    config.minimizer = [new OptimizeCssAssetsWebpackPlugin(), new TerserWebpackPlugin()]
   }
 }
 
@@ -34,22 +31,23 @@ const cssLoader = (...args) => {
       loader: MiniCssExtractPlugin.loader,
       options: {
         hmr: isDev,
-        reloadAll: true
-      }
-    }, 'css-loader'
-  ];
+        reloadAll: true,
+      },
+    },
+    'css-loader',
+  ]
   return [...loader, ...args]
 }
 
 const plugins = () => {
   const base = [
     new HTMLWebpackPlugin({
-      template: './index.html',
+      template: '../index.html',
       minify: {
         removeComments: !isDev,
         collapseWhitespace: !isDev,
-        removeAttributeQuotes: !isDev
-      }
+        removeAttributeQuotes: !isDev,
+      },
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
@@ -59,9 +57,9 @@ const plugins = () => {
       {
         from: path.resolve(__dirname, 'static'),
         to: 'assets',
-        ignore: ['.*']
-      }
-    ])
+        ignore: ['.*'],
+      },
+    ]),
   ]
 
   if (!isDev) base.push(new BundleAnalyzerPlugin())
@@ -73,79 +71,76 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   context: path.resolve(__dirname, 'src'),
   entry: {
-    index: ['@babel/polyfill', './index.js'],
-    analytics: './analiytics.tsx'
+    main: ['@babel/polyfill', './main.ts'],
   },
   output: {
     filename: assetsPath(`js/${filename('js')}`),
     chunkFilename: assetsPath(`js/${filename('js')}`),
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     port: 9000,
-    hot: isDev
+    hot: isDev,
   },
   devtool: isDev ? 'source-map' : '',
   resolve: {
     extensions: ['.js', '.json', '.ts', '.tsx'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      vue$: 'vue/dist/vue.esm.js',
       '@models': path.resolve(__dirname, 'src/models'),
-      '@styles': path.resolve(__dirname, 'src/styles')
-    }
+      '@styles': path.resolve(__dirname, 'src/styles'),
+    },
   },
   optimization: optimization(),
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: cssLoader()
+        use: cssLoader(),
       },
       {
         test: /\.(scss|sass)$/,
-        use: cssLoader('sass-loader')
+        use: cssLoader('sass-loader'),
       },
       {
         test: /\.postcss$/,
-        loader: 'postcss-loader'
+        loader: 'postcss-loader',
       },
       {
         test: /\.js$/,
         exclude: '/node_modules/',
-        loader: 'babel-loader'
+        loader: 'babel-loader',
       },
       {
         test: /\.(ts|tsx)$/,
         exclude: '/node_modules/',
-        use: ['babel-loader', 'eslint-loader']
+        use: ['babel-loader', 'eslint-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'file-loader',
         options: {
           limit: 10000,
-          name: assetsPath('img/[name].[hash:7].[ext]')
-        }
+          name: assetsPath('img/[name].[hash:7].[ext]'),
+        },
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'file-loader',
         options: {
           limit: 10000,
-          name: assetsPath('media/[name].[hash:7].[ext]')
-        }
+          name: assetsPath('media/[name].[hash:7].[ext]'),
+        },
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'file-loader',
         options: {
           limit: 10000,
-          name: assetsPath('fonts/[name].[hash:7].[ext]')
-        }
-      }
-
-    ]
+          name: assetsPath('fonts/[name].[hash:7].[ext]'),
+        },
+      },
+    ],
   },
-  plugins: plugins()
+  plugins: plugins(),
 }
-

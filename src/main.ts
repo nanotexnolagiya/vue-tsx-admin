@@ -3,9 +3,11 @@ import store from './store'
 import router from './router'
 import App from './App'
 
+Vue.config.productionTip = false;
+
 const AppInstance = new Vue({
-  store,
-  router,
+  // store,
+  // router,
   render(h: any){
     return h(App)
   }
