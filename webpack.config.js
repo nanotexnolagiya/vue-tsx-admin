@@ -107,14 +107,9 @@ module.exports = {
         loader: 'postcss-loader',
       },
       {
-        test: /\.js$/,
-        exclude: '/node_modules/',
-        loader: 'babel-loader',
-      },
-      {
         test: /\.(ts|tsx)$/,
         exclude: '/node_modules/',
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader', 'tslint-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
