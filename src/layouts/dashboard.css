@@ -1,0 +1,7 @@
+
+.ant-menu-inline-collapsed {
+  width: 50px;
+}
+.ant-menu-inline-collapsed > .ant-menu-item {
+  padding: 0 17px!important;
+}

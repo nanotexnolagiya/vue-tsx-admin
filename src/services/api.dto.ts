@@ -1,11 +1,20 @@
 import axios from 'axios'
-
-export class ApiService {
-  private instance: any
-
-  constructor() {
-    this.instance = axios
+const instance = axios.create({
+  baseURL: 'https://some-domain.com/api/v1',
+  timeout: 10000,
+  headers: {
+    post: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
+})
+
+instance.interceptors.request.use((config: any) => {
+  return config
+}, Promise.reject)
+
+class ApiDTO {
+  private instance: any = instance
 
   public async get(...args: any[]): Promise<any> {
     try {
@@ -44,4 +53,4 @@ export class ApiService {
   }
 }
 
-export default new ApiService()
+export default ApiDTO
