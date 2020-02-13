@@ -59,6 +59,10 @@ const plugins = () => {
         to: 'assets',
         ignore: ['.*'],
       },
+      {
+        from: path.resolve(__dirname, 'src/mocks'),
+        to: 'assets/mocks'
+      }
     ]),
   ]
 
@@ -116,15 +120,7 @@ module.exports = {
         loader: 'file-loader',
         options: {
           limit: 10000,
-          name: assetsPath('img/[name].[hash:7].[ext]'),
-        },
-      },
-      {
-        test: /\.(json|csv)$/,
-        loader: 'file-loader',
-        options: {
-          limit: 10000,
-          name: assetsPath('mocks/[name].[ext]'),
+          name: assetsPath('images/[name].[hash:7].[ext]'),
         },
       },
       {
