@@ -3,8 +3,16 @@ import { Vue } from 'vue-property-decorator'
 import Component from 'vue-class-component'
 import { Getter, Mutation } from 'vuex-class'
 import { Layout, Menu, Icon} from 'ant-design-vue'
-import MenuTree, { IMenu } from '../components/dashboard/menu-tree'
 import './dashboard.css'
+import Api from '../services/api.dto'
+
+export interface IMenu {
+  id: number,
+  path?: string,
+  name: string,
+  icon: string,
+  children?: IMenu[]
+}
 
 @Component({
   name: 'dashboard-layout',
@@ -17,36 +25,21 @@ import './dashboard.css'
     [Menu.Item.name]: Menu.Item,
     [Menu.SubMenu.name]: Menu.SubMenu,
     [Icon.name]: Icon,
-    [MenuTree.name]: MenuTree
   }
 })
 class Dashboard extends Vue {
   @Getter loading: boolean
   @Mutation('loading') setLoading: () => void
 
+  apiService = new Api()
+
   collapsed: boolean = false
-  menus: IMenu[] = [
-    {
-      id: 1,
-      path: '/admin',
-      name: 'Dashboard',
-      icon: 'area-chart'
-    },
-    {
-      id: 10,
-      name: 'Settings',
-      path: '/setting',
-      icon: 'setting',
-      children: [
-        {
-          id: 11,
-          name: 'Menu',
-          path: '/setting/menu',
-          icon: 'bars'
-        }
-      ]
-    }
-  ]
+  menus: IMenu[] = []
+
+  async mounted() {
+    const res = await this.apiService.get('/mocks/menu.json')
+    this.menus = res.data
+  }
 
   render() {
     const layoutHeaderCss = {
@@ -65,7 +58,7 @@ class Dashboard extends Vue {
           <div class="logo" />
           <a-menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             {
-              this.menus.map(menu => {
+              this.menus.map((menu: IMenu) => {
                 if (menu.children && menu.children.length > 0) {
                   return (
                     <a-sub-menu key={menu.id}>
@@ -73,7 +66,18 @@ class Dashboard extends Vue {
                         <a-icon type={menu.icon} />
                         <span>{ menu.name }</span>
                       </span>
-                      <menu-tree items={menu.children} />
+                      {
+                        menu.children.map((subMenu: IMenu) => {
+                          return (
+                            <a-menu-item key={subMenu.id}>
+                              <a-icon type={subMenu.icon} />
+                              <router-link tag="span" to={subMenu.path}>
+                                { subMenu.name }
+                              </router-link>
+                            </a-menu-item>
+                          )
+                        })
+                      }
                     </a-sub-menu>
                   )
                 } else {

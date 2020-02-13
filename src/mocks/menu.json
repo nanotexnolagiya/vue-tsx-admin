@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "path": "/admin",
+    "name": "Dashboard",
+    "icon": "area-chart"
+  },
+  {
+    "id": 8,
+    "path": "/roles",
+    "name": "Dashboard",
+    "icon": "area-chart"
+  },
+  {
+    "id": 8,
+    "path": "/users",
+    "name": "Isers",
+    "icon": "user"
+  },
+  {
+    "id": 9,
+    "path": "/roles",
+    "name": "Roles",
+    "icon": "user"
+  },
+  {
+    "id": 10,
+    "name": "Settings",
+    "path": "/setting",
+    "icon": "setting",
+    "children": [
+      {
+        "id": 11,
+        "name": "Menu",
+        "path": "/setting/menu",
+        "icon": "bars"
+      }
+    ]
+  }
+]

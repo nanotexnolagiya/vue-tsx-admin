@@ -120,6 +120,14 @@ module.exports = {
         },
       },
       {
+        test: /\.(json|csv)$/,
+        loader: 'file-loader',
+        options: {
+          limit: 10000,
+          name: assetsPath('mocks/[name].[ext]'),
+        },
+      },
+      {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'file-loader',
         options: {
